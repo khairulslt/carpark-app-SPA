@@ -49,25 +49,29 @@
   $("form").click(function (e) {
     e.preventDefault();
     var value = $("#address-input").val();
-    alert(value);
     $.ajax({
         type: "POST",
         data: JSON.stringify({ "text" : value } ),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
+          console.log(data[1]);
           for (let i = 0; i < data[0].length; i += 1) {
             // console.log(data[i]["address"]);
             $("#search-query").append('<div>' + 
               data[0][i]["address"] + 
               ': ' + 
               '</div>');
+            let ticker = false;
             for (let j = 0; j < data[1].length; j += 1) {
               if (data[0][i]["car_park_no"] === data[1][j]["carpark_number"]) {
-                console.log(data[1][j]["carpark_info"][0]);
-                $("#search-query").append('<div>' + '<b>Lots Available: ' + data[1][j]["carpark_info"][0]["lots_available"] + '</div>')
+                ticker = true;
+                $("#search-query").append('<div>' + '<b>Lots Available: ' + data[1][j]["carpark_info"][0]["lots_available"] + '</div>' + '<br>')
               }
-            }            
+            }
+            if (ticker === false) {
+              $("#search-query").append('<div>' + '<b>NO DATA AVAILABLE' + '</div>' + '<br>')    
+            }                    
           }
         }
       });
