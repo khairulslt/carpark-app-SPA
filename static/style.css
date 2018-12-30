@@ -1,0 +1,63 @@
+html {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-family: 'Dosis', sans-serif;
+	line-height: 1.6;
+	letter-spacing: 1px;
+	color: #000;
+	background: #F6F6F6;
+}
+
+body {
+    max-width: 500px;
+    margin: auto;
+    padding: 10px;
+}
+
+form {
+    display: inline-block; /*keeps forms in same line*/
+}
+
+.index-form {
+	margin-bottom: 42px;
+}
+
+.carpark-links {
+	margin: 16px;
+}
+
+.cp-address {
+  border-top: 1px solid #8c8c8c;
+  border-bottom: 1px solid #8c8c8c;
+}
+
+.link {
+  align-items: normal;
+  background-color: rgba(0,0,0,0);
+  border-style: none;
+  cursor: pointer;
+  display: inline;
+  font: inherit;
+  height: auto;
+  padding: 0;
+  perspective-origin: 0 0;
+  text-align: start;
+  text-decoration: underline;
+  transform-origin: 0 0;
+  width: auto;
+  outline: 1 solid red;
+  -moz-appearance: none;
+}
+
+.link:hover{
+	color: rgb(0, 0, 238); 
+}
+
+p.cp_items {
+	margin: 0;
+}
+
+div.cp_availability {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
