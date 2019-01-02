@@ -23,7 +23,7 @@
           required>
         </p> <!-- regex (prevent numeric inputs) -->
 
-         <p>Note: Beta Version - API Coverage is limited (e.g <b>"Teban"</b> works but <b>"Orchard"</b> and other HDB/CBD Areas/Private/Landed estates might not work. Postal codes and numeric inputs like <b>"650122"</b> are not valid inputs as well.)</p>
+         <p>Note: Beta Version - API Coverage is limited (e.g <b>"Teban"</b> works but <b>"Orchard"</b> and other HDB/CBD Areas/Private/Landed estates might not work. Postal codes and numeric inputs like <b>"650122"</b> are not valid inputs as well)</p>
          <p><input onclick="store()" type = "submit" value = "Submit"></p>
       </form>
 
@@ -46,8 +46,15 @@
       console.log("LOADED FROM LOCALSTORAGE");
     }
 
-  $("form").click(function (e) {
+  $("form").submit(function (e) {
     e.preventDefault();
+
+    $(".addressContent").remove();
+    $("#search-query").append('<div class="addressContent">' + 
+      'Connecting... Please wait' + 
+      '</div>'
+      );
+
     var value = $("#address-input").val();
     $.ajax({
         type: "POST",
@@ -55,23 +62,64 @@
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
-          // console.log(data[1]);
+          $(".addressContent").remove();
+          if (data[0].length == 0 && data[1].length == 0) {
+            $("#search-query").append('<div class="addressContent">' + 
+              '<b class="addressContent">Error - Try another address' + 
+              '</div>' + 
+              '<br>'
+              )
+          }
+
           for (let i = 0; i < data[0].length; i += 1) {
-            // console.log(data[i]["address"]);
-            $("#search-query").append('<div>' + 
+            $("#search-query").append('<div class="addressContent">' + 
               data[0][i]["address"] + 
               ': ' + 
-              '</div>');
+              '</div>'
+              );
+
             let ticker = false;
-            for (let j = 0; j < data[1].length; j += 1) {
-              if (data[0][i]["car_park_no"] === data[1][j]["carpark_number"]) {
+
+            for (let j = 0; j < data[2].length; j += 1) {
+              if (data[0][i]["car_park_no"] === data[2][j]["carpark_number"]) {
                 ticker = true;
-                $("#search-query").append('<div>' + '<b>Lots Available: ' + data[1][j]["carpark_info"][0]["lots_available"] + '</div>' + '<br>')
+                $("#search-query").append('<div class="addressContent">' + 
+                  '<b class="addressContent">Lots Available: ' + 
+                  data[2][j]["carpark_info"][0]["lots_available"] +                   
+                  ' (' +
+                  data[2][j]["carpark_info"][0]["lot_type"] + 
+                  ')' +
+                  '</div>' + 
+                  '<br>'
+                  )
               }
             }
+
             if (ticker === false) {
-              $("#search-query").append('<div>' + '<b>NO DATA AVAILABLE' + '</div>' + '<br>')    
-            }                    
+              $("#search-query").append('<div class="addressContent">' + 
+                '<b class="addressContent">NO DATA AVAILABLE' + 
+                '</div>' + 
+                '<br>'
+                )    
+            }
+          }
+
+
+          for (let k = 0; k < data[1].length; k += 1) {
+            $("#search-query").append('<div class="addressContent">' + 
+              data[1][k]["ura_carpark_name"] + 
+              ': ' + 
+              '</div>' +
+              '<div class="addressContent">' +
+              '<b class="addressContent">' +
+              'Lots Available: ' +
+              data[1][k]["number_of_lots"] +
+              ' (' +
+              data[1][k]["type_of_lot"] +
+              ')' +
+              '</div>' +
+              '</br>'
+              );
           }
         }
       });
