@@ -20,7 +20,7 @@ def index_page():
 		carpark_api = requests.get("https://api.data.gov.sg/v1/transport/carpark-availability")
 		carpark_json = carpark_api.json()
 		cp_data = carpark_json['items'][0]["carpark_data"]
-
+		
 		return jsonify(cp_info1, cp_info2, cp_data)
 	return render_template("index.html")
 		
